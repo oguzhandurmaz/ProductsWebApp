@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Products";
+}
+<cache expires-after="@TimeSpan.FromHours(12)" vary-by-route="Index">
+<div class="row">
+    <h1>@DateTime.Now</h1>
+    <div class="col-2 d-flex flex-column">
+        <span>Kategoriler</span>
+        <select class="form-select mt-1" id="category" aria-label="Select Category" name="categoryId">
+            <option value="0">Choose Category</option>
+            @if (Model != null)
+            {
+                @foreach (var category in Model)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            }
+
+        </select>
+
+        <button id="product-query-button" class="btn btn-success m-2">Ara</button>
+    </div>
+    <div class="col">
+        
+            <div id="partialView" data-url="/Product/Products">
+                <div class="d-flex justify-content-center">Loading...</div>
+            </div>
+
+    </div>
+</div>
+</cache>
+<script>
+    $(function () {
+        getProducts();
+    });
+
+    $("#product-query-button").click(getProducts);
+
+    //Get Products and load partial
+    function getProducts() {
+        var query = new URLSearchParams(window.location.search).get("query");
+        var partial = $("#partialView");
+        var url = $(partial).data("url");
+        $.get(url, {
+            categoryId: $("#category").find(":selected").val(),
+            name: query
+        }, function (result) {
+            $(partial).html(result);
+        }
+        );
+    }
+
+</script>

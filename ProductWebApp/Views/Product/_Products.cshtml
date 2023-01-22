@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Product>
+@if(Model == null)
+{
+    <div class="d-flex justify-content-center">An error occured while getting Products.</div>
+    return;
+}
+@if(Model.Count() == 0)
+{
+    <div class="d-flex justify-content-center">No products found.</div>
+    return;
+}
+<div class="row">
+@foreach (var product in Model)
+{
+    <div class="col-sm-3 m-1">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@product.Name</h5>
+                <p class="card-text">@product.Description</p>
+                <p class="text-success card-text">@product.ListPrice.ToString("N2")</p>
+                <a href="#" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    </div>
+}
+</div>
